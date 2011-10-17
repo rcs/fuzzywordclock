@@ -1,0 +1,18 @@
+{
+  "author": "Ryan Sorensen (https://github.com/rcs/)",
+  "name": "fuzzywordclock",
+  "description": "A coffeescript library to generate human readable fuzzy clocks",
+  "version": "0.1.0",
+  "homepage": "https://github.com/rcs/fuzzywordclock",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rcs/fuzzywordclock.git"
+  },
+  "engines": {
+    "node": "~0.4.11"
+  },
+  "dependencies": {
+    "Milk": "1.2.0"
+  },
+  "devDependencies": {}
+}
