@@ -14,5 +14,7 @@
   "dependencies": {
     "Milk": "1.2.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "jasmine-node": "1.0.11"
+  }
 }

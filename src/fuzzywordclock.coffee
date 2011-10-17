@@ -4,41 +4,21 @@ currentDate = new Date
 
 minutes_past_hour = currentDate.getMinutes()
 
-hours = [
-    "midnight",
-    "one",
-    "two",
-    "three",
-    "four",
-    "five",
-    "six",
-    "seven",
-    "eight",
-    "nine",
-    "ten",
-    "eleven"
-    "noon",
-    "one",
-    "two",
-    "three",
-    "four",
-    "five",
-    "six",
-    "seven",
-    "eight",
-    "nine",
-    "ten",
-    "eleven"
-  ] 
 
-this_hour = hours[currentDate.getHours() % hours.length]
-next_hour = hours[(currentDate.getHours() + 1) % hours.length]
+human_hour = (hour_number) -> 
+  hours = [
+      "midnight", "one", "two", "three", "four", "five",
+      "six", "seven", "eight", "nine", "ten", "eleven"
+      "noon", "one", "two", "three", "four", "five",
+      "six", "seven", "eight", "nine", "ten", "eleven"
+    ]
+  hours[hour_number % hours.length]
 
 # Given the minutes of the time, return the format string
-minute_expression = (minutes) ->
+time_expression = (minutes) ->
   # 0 - twelve, 1 - one
   if 0 <= minutes <= 4
-    "about {{this_hour}}" # about twelve
+    "around {{this_hour}}" # around twelve
   else if 5 <= minutes <= 11
     "just past {{this_hour}}" # just past twelve 
   else if 12 <= minutes <= 21
@@ -56,18 +36,16 @@ minute_expression = (minutes) ->
   else if 52 <= minutes <= 57
     "almost {{next_hour}}" # almost one
   else
-    "about {{next_hour}}" # about one
+    "around {{next_hour}}" # around one
 
+fuzzy_time = (date) ->
+  format_string = time_expression(date.getMinutes())
+  ctx = {
+    this_hour: human_hour(currentDate.getHours()),
+    next_hour: human_hour(currentDate.getHours()+1)
+  }
+  Milk.render(format_string, ctx)
 
-format_string = minute_expression(currentDate.getMinutes()) + '\n'
+process.stdout.write fuzzy_time(new Date) + '\n'
 
-
-process.stdout.write minute_expression(currentDate.getMinutes()) + '\n'
-
-ctx = {
-  this_hour: this_hour,
-  next_hour: next_hour
-}
-
-process.stdout.write Milk.render(format_string, ctx) + '\n'
-
+module.exports.fuzzy_time = fuzzy_time
