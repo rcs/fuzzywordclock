@@ -41,11 +41,38 @@ time_expression = (minutes) ->
 fuzzy_time = (date) ->
   format_string = time_expression(date.getMinutes())
   ctx = {
-    this_hour: human_hour(currentDate.getHours()),
-    next_hour: human_hour(currentDate.getHours()+1)
+    this_hour: human_hour(date.getHours()),
+    next_hour: human_hour(date.getHours()+1)
   }
   Milk.render(format_string, ctx)
 
-process.stdout.write fuzzy_time(new Date) + '\n'
+fuzzy_date = (date) -> 
+  format_string = '{{prefix}} a {{daytype}}'
+  working_date = new Date(date)
 
-module.exports.fuzzy_time = fuzzy_time
+  if date.getHours() < 6
+    prefix = 'before'
+  else if date.getHours() > 20
+    prefix = 'before'
+    working_date.setDate(working_date.getDate() + 1 )
+  else
+    prefix = 'on'
+
+  if 1 <= working_date.getDay() <= 5
+    daytype = 'workday'
+  else
+    daytype = 'weekend'
+
+  Milk.render(format_string,{prefix: prefix, daytype: daytype})
+
+fuzzy_datetime = (date) ->
+  fuzzy_time(date) + ' ' + fuzzy_date(date)
+
+date = new Date('2011-10-17 12:00:00')
+process.stdout.write fuzzy_datetime(date) + '\n'
+
+module.exports = {
+  fuzzy_time: fuzzy_time,
+  fuzzy_datetime: fuzzy_datetime,
+  fuzzy_date: fuzzy_date
+}
